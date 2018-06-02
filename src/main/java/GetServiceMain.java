@@ -24,12 +24,13 @@ public class GetServiceMain {
     public static void main(String[] args) {
 //        getNormal();
 //        getWithQuery();
-//        getWithHeaders();
+//        getWithQueryAndHeaders();
+        getWithQueryAndHeader();
 //        getWithPath();
-        getWithGsonConverter();
+//        getWithGsonConverter();
     }
 
-    //Get请求时不会带任何自定义的参数与头部信息，访问的链接是：/Get/getString
+    //Get请求时不会带任何自定义的参数与请求头，访问的链接是：/Get/getString
     private static void getNormal() {
         GetService getService = buildRetrofit().create(GetService.class);
         getService.getNormal().enqueue(new Callback<ResponseBody>() {
@@ -107,11 +108,37 @@ public class GetServiceMain {
         });
     }
 
-    //Get请求时带上参数和头部信息，参数将作为链接的后缀，生成的链接是：/Get/getString?name=leavesC&age=24
+    //Get请求时带上参数和固定请求头，参数将作为链接的后缀，生成的链接是：/Get/getString?name=leavesC&age=24
     //带上的Header的key是：userName，value是：leavesC
-    private static void getWithHeaders() {
+    private static void getWithQueryAndHeaders() {
         GetService getService = buildRetrofit().create(GetService.class);
         getService.getWithQueryAndHeaders("leavesC", 24).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    try {
+                        //返回的数据是：{"code":1,"msg":"success","data":{"name":"leavesC","mobile":123456}}
+                        System.out.println("onResponse body: " + response.body().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    System.out.println("onResponse code: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                System.out.println("onFailure: " + t.getMessage());
+            }
+        });
+    }
+
+    //Get请求时带上参数和非固定值的请求头，参数将作为链接的后缀，生成的链接是：/Get/getString?name=leavesC&age=24
+    //带上的Header的key是：userName，value是：Hi
+    private static void getWithQueryAndHeader() {
+        GetService getService = buildRetrofit().create(GetService.class);
+        getService.getWithQueryAndHeader("Hi", "leavesC", 24).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {

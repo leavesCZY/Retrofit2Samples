@@ -7,6 +7,9 @@ import retrofit2.Call;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.PartMap;
+
+import java.util.Map;
 
 /**
  * 作者：chenZY
@@ -18,5 +21,9 @@ public interface UploadService {
     @Multipart
     @POST("uploadPhoto")
     Call<ResponseBody> uploadPhoto(@Part MultipartBody.Part photo, @Part("userName") RequestBody username, @Part("password") RequestBody password);
+
+    @Multipart
+    @POST("uploadFileDouble")
+    Call<ResponseBody> uploadFileDouble(@PartMap Map<String, RequestBody> files);
 
 }
