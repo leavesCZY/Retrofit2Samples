@@ -21,7 +21,9 @@ import java.util.Map;
 public class PostServiceMain {
 
     public static void main(String[] args) {
-
+//        postWithField();
+//        postWithFieldMap();
+        postWithBody();
     }
 
     private static void postWithField() {
@@ -31,6 +33,7 @@ public class PostServiceMain {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
                     try {
+                        //返回的数据：{"code":1,"msg":"success","data":{"name":"leavesC","mobile":123456}}
                         System.out.println("onResponse body: " + response.body().string());
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -73,7 +76,7 @@ public class PostServiceMain {
         });
     }
 
-    private static void postWithGsonConverter2() {
+    private static void postWithBody() {
         PostService postService = buildRetrofit().create(PostService.class);
         postService.postWithBody(new User("czy", "1234")).enqueue(new Callback<ResponseBody>() {
             @Override
